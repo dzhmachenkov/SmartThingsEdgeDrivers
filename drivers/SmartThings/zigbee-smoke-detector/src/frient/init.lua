@@ -14,9 +14,15 @@
 
 local battery_defaults = require "st.zigbee.defaults.battery_defaults"
 
-local is_frient_smoke_detector = function(opts, driver, device)
-  if device:get_manufacturer() == "frient A/S" then
-    return true
+local FINGERPRINTS = {
+  { mfr = "frient A/S", model = "SMSZB-120" }
+}
+
+local can_handle = function(opts, driver, device)
+  for _, fingerprint in ipairs(FINGERPRINTS) do
+    if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
+      return true
+    end
   end
   return false
 end
@@ -26,7 +32,7 @@ local frient_smoke_detector = {
   lifecycle_handlers = {
     init = battery_defaults.build_linear_voltage_init(2.3, 3.0)
   },
-  can_handle = is_frient_smoke_detector
+  can_handle = can_handle
 }
 
 return frient_smoke_detector

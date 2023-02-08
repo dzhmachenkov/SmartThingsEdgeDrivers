@@ -17,13 +17,28 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local constants = require "st.zigbee.constants"
 
+local device_init = function(self, device)
+  local configuration = configurationMap.get_device_configuration(device)
+  if configuration ~= nil then
+    for _, attribute in ipairs(configuration) do
+      device:add_configured_attribute(attribute)
+      device:add_monitored_attribute(attribute)
+    end
+  end
+end
+
 local zigbee_smoke_driver_template = {
   supported_capabilities = {
     capabilities.smokeDetector,
+    capabilities.alarm,
+    capabilities.temperatureMeasurement,
     capabilities.battery
   },
   sub_drivers = { require("frient") },
   ias_zone_configuration_method = constants.IAS_ZONE_CONFIGURE_TYPE.AUTO_ENROLL_RESPONSE,
+  lifecycle_handlers = {
+    init = device_init
+  }
 }
 
 defaults.register_for_default_handlers(zigbee_smoke_driver_template, zigbee_smoke_driver_template.supported_capabilities)

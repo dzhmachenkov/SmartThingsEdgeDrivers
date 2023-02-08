@@ -15,48 +15,22 @@
 local clusters = require "st.zigbee.zcl.clusters"
 local constants = require "st.zigbee.constants"
 
-local ColorControl = clusters.ColorControl
 local IASZone = clusters.IASZone
 
 local devices = {
-  IKEA_RGB_BULB = {
+  FRIENT_SMOKE_DETECTOR = {
     FINGERPRINTS = {
-      { mfr = "IKEA of Sweden", model = "TRADFRI bulb E27 CWS opal 600lm" },
-      { mfr = "IKEA of Sweden", model = "TRADFRI bulb E26 CWS opal 600lm" }
+      { mfr = "frient A/S", model = "SMSZB-120" }
     },
     CONFIGURATION = {
-      {
-        cluster = ColorControl.ID,
-        attribute = ColorControl.attributes.CurrentX.ID,
-        minimum_interval = 1,
-        maximum_interval = 3600,
-        data_type = ColorControl.attributes.CurrentX.base_type,
-        reportable_change = 16
-      },
-      {
-        cluster = ColorControl.ID,
-        attribute = ColorControl.attributes.CurrentY.ID,
-        minimum_interval = 1,
-        maximum_interval = 3600,
-        data_type = ColorControl.attributes.CurrentY.base_type,
-        reportable_change = 16
-      }
-    }
-  },
-  SENGLED_BULB_WITH_MOTION_SENSOR = {
-    FINGERPRINTS = {
-      { mfr = "sengled", model = "E13-N11" }
-    },
-    CONFIGURATION = {
-      {
+      --[[{
         cluster = IASZone.ID,
         attribute = IASZone.attributes.ZoneStatus.ID,
         minimum_interval = 30,
         maximum_interval = 300,
         data_type = IASZone.attributes.ZoneStatus.base_type
-      }
-    },
-    IAS_ZONE_CONFIG_METHOD = constants.IAS_ZONE_CONFIGURE_TYPE.AUTO_ENROLL_RESPONSE
+      }]]
+    }
   }
 }
 

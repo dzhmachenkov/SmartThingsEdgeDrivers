@@ -20,10 +20,10 @@ zigbeeManufacturer:
     model: SmokeSensor-N-3.0
     deviceProfileName: smoke-battery
   - id: "frient/SMSZB-120"
-    deviceLabel: frient Smoke Detector
+    deviceLabel: Intelligent Smoke Alarm
     manufacturer: frient A/S
     model: SMSZB-120
-    deviceProfileName: smoke-battery
+    deviceProfileName: smoke-battery-temperature-siren
   - id: "Heiman/Orvibo/Gas3"
     deviceLabel: Orvibo Gas Detector
     manufacturer: Heiman
