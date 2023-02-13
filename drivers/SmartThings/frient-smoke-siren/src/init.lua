@@ -1,34 +1,34 @@
-local ZigbeeDriver = require "st.zigbee"
-local defaults = require "st.zigbee.defaults"
-local constants = require "st.zigbee.constants"
-local data_types = require "st.zigbee.data_types"
+local ZigbeeDriver        = require "st.zigbee"
+local defaults            = require "st.zigbee.defaults"
+local constants           = require "st.zigbee.constants"
+local data_types          = require "st.zigbee.data_types"
 local zcl_global_commands = require "st.zigbee.zcl.global_commands"
-local log = require "log"
-local cluster_base = require "st.zigbee.cluster_base"
+local log                 = require "log"
+local cluster_base        = require "st.zigbee.cluster_base"
 
-local zcl_clusters = require "st.zigbee.zcl.clusters"
-local Status = require "st.zigbee.generated.types.ZclStatus"
-local IASZone = zcl_clusters.IASZone
-local IASWD = zcl_clusters.IASWD
-local SirenConfiguration = IASWD.types.SirenConfiguration
+local zcl_clusters        = require "st.zigbee.zcl.clusters"
+local Status              = require "st.zigbee.generated.types.ZclStatus"
+local IASZone             = zcl_clusters.IASZone
+local IASWD               = zcl_clusters.IASWD
+local SirenConfiguration  = IASWD.types.SirenConfiguration
 local SquawkConfiguration = IASWD.types.SquawkConfiguration
-local WarningMode = IASWD.types.WarningMode
-local Strobe = IASWD.types.Strobe
-local SquawkMode = IASWD.types.SquawkMode
-local IaswdLevel = IASWD.types.IaswdLevel
-local Basic = zcl_clusters.Basic
+local WarningMode         = IASWD.types.WarningMode
+local Strobe              = IASWD.types.Strobe
+local SquawkMode          = IASWD.types.SquawkMode
+local IaswdLevel          = IASWD.types.IaswdLevel
+local Basic               = zcl_clusters.Basic
 
-local capabilities = require "st.capabilities"
+local capabilities        = require "st.capabilities"
 
-local BASE_FUNCTIONS = require "device_base_functions"
+local BASE_FUNCTIONS      = require "device_base_functions"
 
 log.trace("Initializing frient driver")
 
 -- Constants
-local ALARM_STROBE_DUTY_CYCLE = 40
+local ALARM_STROBE_DUTY_CYCLE    = 40
 local ALARM_STROBE_NO_DUTY_CYCLE = 0
 
-local alarm_command = {
+local alarm_command              = {
   OFF = 0,
   SIREN = 1,
   STROBE = 2,
@@ -65,11 +65,11 @@ local function send_siren_command(device, warning_mode, warning_siren_level, str
     device:send(cluster_base.read_manufacturer_specific_attribute(device, Basic.ID, BASE_FUNCTIONS.DEVELCO_BASIC_PRIMARY_SW_VERSION_ATTR, BASE_FUNCTIONS.DEVELCO_MANUFACTURER_CODE))
   end
 
-  local max_duration = device:get_field(BASE_FUNCTIONS.ALARM_MAX_DURATION)
+  local max_duration     = device:get_field(BASE_FUNCTIONS.ALARM_MAX_DURATION)
   local warning_duration = max_duration and max_duration or BASE_FUNCTIONS.ALARM_DEFAULT_MAX_DURATION
-  local duty_cycle = (strobe_active == Strobe.USE_STROBE) and ALARM_STROBE_DUTY_CYCLE or ALARM_STROBE_NO_DUTY_CYCLE
+  local duty_cycle       = (strobe_active == Strobe.USE_STROBE) and ALARM_STROBE_DUTY_CYCLE or ALARM_STROBE_NO_DUTY_CYCLE
 
-  device:set_field(BASE_FUNCTIONS.ALARM_LAST_DURATION, warning_duration, {persist = true})
+  device:set_field(BASE_FUNCTIONS.ALARM_LAST_DURATION, warning_duration, { persist = true })
 
   local siren_configuration
 
@@ -77,7 +77,8 @@ local function send_siren_command(device, warning_mode, warning_siren_level, str
     -- Old frient firmware, the endian format is reversed
     log.warn("Reverse endian format detected")
     local siren_config_value = (warning_siren_level << 6) | (strobe_active << 4) | warning_mode
-    siren_configuration = SirenConfiguration(siren_config_value)
+
+    siren_configuration      = SirenConfiguration(siren_config_value)
   else
     siren_configuration = SirenConfiguration(0x00)
     siren_configuration:set_warning_mode(warning_mode)
@@ -113,8 +114,9 @@ local function send_squawk_command(device, squawk_mode, squawk_siren_level, stro
   if (device:get_field(BASE_FUNCTIONS.SIREN_ENDIAN) == "reverse") then
     -- Old frient firmware, the endian format is reversed
     log.warn("Reverse endian format detected")
-    local squawk_config_value = (squawk_siren_level << 6) | (strobe_active << 4)  | squawk_mode
-    squawk_configuration = SquawkConfiguration(squawk_config_value)
+
+    local squawk_config_value = (squawk_siren_level << 6) | (strobe_active << 4) | squawk_mode
+    squawk_configuration      = SquawkConfiguration(squawk_config_value)
   else
     squawk_configuration = SquawkConfiguration(0x00)
     squawk_configuration:set_squawk_mode(squawk_mode)
@@ -135,8 +137,8 @@ end
 --- @param zb_rx st.zigbee.ZigbeeMessageRx the full message this report came in
 local function default_response_handler(driver, device, zb_rx)
   local is_success = zb_rx.body.zcl_body.status.value
-  local command = zb_rx.body.zcl_body.cmd.value
-  local alarm_ev = device:get_field(BASE_FUNCTIONS.ALARM_COMMAND)
+  local command    = zb_rx.body.zcl_body.cmd.value
+  local alarm_ev   = device:get_field(BASE_FUNCTIONS.ALARM_COMMAND)
 
   if command == IASWD.server.commands.StartWarning.ID and is_success == Status.SUCCESS then
     if alarm_ev ~= alarm_command.OFF then
@@ -147,7 +149,7 @@ local function default_response_handler(driver, device, zb_rx)
         device:emit_event(capabilities.switch.switch.off())
       end)
     else
-      emit_alarm_event(device,alarm_command.OFF)
+      emit_alarm_event(device, alarm_command.OFF)
     end
   end
 end
@@ -156,7 +158,7 @@ end
 --- @param device st.zigbee.Device The device this message was received from containing identifying information
 --- @param max_duration st.zigbee.data_types.Uint8 the value of the attribute
 local function attr_max_duration_handler(driver, device, max_duration)
-  device:set_field(BASE_FUNCTIONS.ALARM_MAX_DURATION, max_duration.value, {persist = true})
+  device:set_field(BASE_FUNCTIONS.ALARM_MAX_DURATION, max_duration.value, { persist = true })
 end
 
 --- @param driver ZigbeeDriver The current driver running containing necessary context for execution
@@ -164,7 +166,7 @@ end
 --- @param command string Command parameters if applicable
 local function siren_switch_both_handler(driver, device, command)
   log.debug("Starting Siren + Strobe")
-  device:set_field(BASE_FUNCTIONS.ALARM_COMMAND, alarm_command.BOTH, {persist = true})
+  device:set_field(BASE_FUNCTIONS.ALARM_COMMAND, alarm_command.BOTH, { persist = true })
   send_siren_command(device, device.preferences.warningSound == nil and WarningMode.BURGLAR or WarningMode[device.preferences.warningSound], device.preferences.warningLevel == nil and IaswdLevel.VERY_HIGH_LEVEL or IaswdLevel[device.preferences.warningLevel], Strobe.USE_STROBE, IaswdLevel.VERY_HIGH_LEVEL)
 end
 
@@ -173,7 +175,7 @@ end
 --- @param command string Command parameters if applicable
 local function siren_alarm_siren_handler(driver, device, command)
   log.debug("Starting Siren")
-  device:set_field(BASE_FUNCTIONS.ALARM_COMMAND, alarm_command.SIREN, {persist = true})
+  device:set_field(BASE_FUNCTIONS.ALARM_COMMAND, alarm_command.SIREN, { persist = true })
   send_siren_command(device, device.preferences.warningSound == nil and WarningMode.BURGLAR or WarningMode[device.preferences.warningSound], device.preferences.warningLevel == nil and IaswdLevel.VERY_HIGH_LEVEL or IaswdLevel[device.preferences.warningLevel], Strobe.NO_STROBE, IaswdLevel.LOW_LEVEL)
 end
 
@@ -182,7 +184,7 @@ end
 --- @param command string Command parameters if applicable
 local function siren_alarm_strobe_handler(driver, device, command)
   log.debug("Starting Strobe")
-  device:set_field(BASE_FUNCTIONS.ALARM_COMMAND, alarm_command.STROBE, {persist = true})
+  device:set_field(BASE_FUNCTIONS.ALARM_COMMAND, alarm_command.STROBE, { persist = true })
   send_siren_command(device, WarningMode.STOP, IaswdLevel.LOW_LEVEL, Strobe.USE_STROBE, IaswdLevel.VERY_HIGH_LEVEL)
 end
 
@@ -206,7 +208,7 @@ end
 --- @param device st.zigbee.Device The device this message was received from containing identifying information
 --- @param command string Command parameters if applicable
 local function siren_switch_off_handler(driver, device, command)
-  device:set_field(BASE_FUNCTIONS.ALARM_COMMAND, alarm_command.OFF, {persist = true})
+  device:set_field(BASE_FUNCTIONS.ALARM_COMMAND, alarm_command.OFF, { persist = true })
   log.debug("Starting Switch Off")
   send_siren_command(device, WarningMode.STOP, IaswdLevel.LOW_LEVEL, Strobe.NO_STROBE, IaswdLevel.LOW_LEVEL)
 end
@@ -217,9 +219,9 @@ end
 --- @param zb_rx st.zigbee.ZigbeeMessageRx the full message this report came in
 local function primary_sw_version_attr_handler(driver, device, value, zb_rx)
   --log.warn("Manufacturer Primary Software Version Attribute report: 0x"..string.format("%x", zb_rx.body.zcl_body.attr_records[1].attr_id.value).."=0x"..value.value)
-  local primary_sw_version = value.value:gsub('.', function (c) return string.format('%02x', string.byte(c)) end)
-  log.debug("Manufacturer Primary Software Version firmware: 0x"..primary_sw_version)
-  device:set_field(BASE_FUNCTIONS.PRIMARY_SW_VERSION, primary_sw_version, {persist = true})
+  local primary_sw_version = value.value:gsub('.', function(c) return string.format('%02x', string.byte(c)) end)
+  log.debug("Manufacturer Primary Software Version firmware: 0x" .. primary_sw_version)
+  device:set_field(BASE_FUNCTIONS.PRIMARY_SW_VERSION, primary_sw_version, { persist = true })
 end
 
 --- @param driver ZigbeeDriver The current driver running containing necessary context for execution
@@ -233,8 +235,10 @@ end
 --- @param event string The lifecycle event name
 --- @param args table Table containing information relevant to the lifecycle event
 local function do_configure(driver, device, event, args)
-  log.trace("Configuring device:"..event)--..", "..util.stringify_table(args, nil, true))
-  if ((event == "doConfigure") or (args and args.old_st_store)) then -- Only if we got a parameter update then reinitialize, infoChanged could be called periodically also
+
+  log.trace("Configuring device:" .. event)--..", "..util.stringify_table(args, nil, true))
+  if ((event == "doConfigure") or (args and args.old_st_store)) then
+    -- Only if we got a parameter update then reinitialize, infoChanged could be called periodically also
     BASE_FUNCTIONS.do_configure(driver, device, event, args)
   end
 
@@ -273,8 +277,9 @@ local zigbee_smoke_siren_driver_template = {
   },
   sub_drivers = {
     require("frient-smoke"),
-    require("frient-siren")
-   },
+    require("frient-siren"),
+    require("frient-heat")
+  },
   ias_zone_configuration_method = constants.IAS_ZONE_CONFIGURE_TYPE.AUTO_ENROLL_RESPONSE,
   lifecycle_handlers = {
     added = device_added,
@@ -285,8 +290,8 @@ local zigbee_smoke_siren_driver_template = {
   zigbee_handlers = {
     global = {
       [IASWD.ID] = {
-            [zcl_global_commands.DEFAULT_RESPONSE_ID] = default_response_handler
-        }
+        [zcl_global_commands.DEFAULT_RESPONSE_ID] = default_response_handler
+      }
     },
     attr = {
       [Basic.ID] = {
