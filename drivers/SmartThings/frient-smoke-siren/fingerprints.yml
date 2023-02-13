@@ -9,3 +9,8 @@ zigbeeManufacturer:
     manufacturer: frient A/S
     model: SIRZB-110
     deviceProfileName: siren-battery-source-tamper
+  - id: "frient/REXZB-111"
+    deviceLabel: Range Extender
+    manufacturer: frient A/S
+    model: REXZB-111
+    deviceProfileName: siren-battery-source-tamper
