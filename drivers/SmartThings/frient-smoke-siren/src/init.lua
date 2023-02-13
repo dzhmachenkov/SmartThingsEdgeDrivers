@@ -235,7 +235,6 @@ end
 --- @param event string The lifecycle event name
 --- @param args table Table containing information relevant to the lifecycle event
 local function do_configure(driver, device, event, args)
-
   log.trace("Configuring device:" .. event)--..", "..util.stringify_table(args, nil, true))
   if ((event == "doConfigure") or (args and args.old_st_store)) then
     -- Only if we got a parameter update then reinitialize, infoChanged could be called periodically also
@@ -278,7 +277,8 @@ local zigbee_smoke_siren_driver_template = {
   sub_drivers = {
     require("frient-smoke"),
     require("frient-siren"),
-    require("frient-heat")
+    require("frient-heat"),
+    require("frient-waterleak")
   },
   ias_zone_configuration_method = constants.IAS_ZONE_CONFIGURE_TYPE.AUTO_ENROLL_RESPONSE,
   lifecycle_handlers = {

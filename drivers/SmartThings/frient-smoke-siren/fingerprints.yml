@@ -14,3 +14,8 @@ zigbeeManufacturer:
     manufacturer: frient A/S
     model: HESZB-120
     deviceProfileName: heat-siren-temperature-battery
+  - id: "frient/FLSZB-110"
+    deviceLabel: Water Leak Detector
+    manufacturer: frient A/S
+    model: FLSZB-110
+    deviceProfileName: water-temp-battery-siren
