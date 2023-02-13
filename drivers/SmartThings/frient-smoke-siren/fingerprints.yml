@@ -19,3 +19,8 @@ zigbeeManufacturer:
     manufacturer: frient A/S
     model: FLSZB-110
     deviceProfileName: water-temp-battery-siren
+  - id: "frient/REXZB-111"
+    deviceLabel: Range Extender
+    manufacturer: frient A/S
+    model: REXZB-111
+    deviceProfileName: siren-battery-source-tamper
