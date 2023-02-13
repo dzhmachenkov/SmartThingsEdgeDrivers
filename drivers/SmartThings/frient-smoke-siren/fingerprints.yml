@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "frient/HESZB-120"
+    deviceLabel: Intelligent Heat Alarm
+    manufacturer: frient A/S
+    model: HESZB-120
+    deviceProfileName: heat-siren-temperature-battery
