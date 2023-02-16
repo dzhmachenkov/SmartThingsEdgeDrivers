@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "frient/HMSZB-110"
+    deviceLabel: Smart Humidity Sensor
+    manufacturer: frient A/S
+    model: HMSZB-110
+    deviceProfileName: humidity-temperature-battery
