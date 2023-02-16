@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "frient/AQSZB-110"
+    deviceLabel: Air Quality Sensor
+    manufacturer: frient A/S
+    model: AQSZB-110
+    deviceProfileName: airquality-humidity-temperature-battery

@@ -1,0 +1,5 @@
+name: 'frient Air Quality_Humidity'
+description: 'frient EDGE driver for Air Quality sensor and Smart humidity sensor'
+packageKey: 'frient-airquality'
+permissions:
+  zigbee: {}
