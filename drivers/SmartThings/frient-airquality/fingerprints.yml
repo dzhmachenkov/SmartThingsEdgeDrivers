@@ -4,6 +4,11 @@ zigbeeManufacturer:
     manufacturer: frient A/S
     model: AQSZB-110
     deviceProfileName: airquality-humidity-temperature-battery
+  - id: "frient/HMSZB-110"
+    deviceLabel: Smart Humidity Sensor
+    manufacturer: frient A/S
+    model: HMSZB-110
+    deviceProfileName: humidity-temperature-battery
   - id: "frient/HMSZB-120"
     deviceLabel: Smart Humidity Sensor
     manufacturer: frient A/S
