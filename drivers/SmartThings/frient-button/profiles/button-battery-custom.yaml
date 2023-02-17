@@ -1,0 +1,36 @@
+name: button-battery-custom
+components:
+  - id: main
+    capabilities:
+      - id: button
+        version: 1
+      - id: battery
+        version: 1
+      - id: firmwareUpdate
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: RemoteController
+preferences:
+  - title: "LED Color"
+    name: ledColor
+    description: "Color of LED when button is pressed"
+    required: false
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "Off"
+        1: "Red"
+        2: "Green"
+        3: "Yellow"
+      default: "2"
+  - title: "Button delay (ms)"
+    name: buttonDelay
+    description: "Delay before button press is registered in milliseconds"
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 0
+      maximum: 9000
+      default: 100

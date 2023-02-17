@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "frient/SBTZB-110"
+    deviceLabel: Smart Button
+    manufacturer: frient A/S
+    model: SBTZB-110
+    deviceProfileName: button-battery-custom
