@@ -30,7 +30,8 @@ local frient_airquality_driver_template = {
     capabilities.battery,
   },
   sub_drivers = {
-    require("frient-airquality")
+    require("frient-airquality"),
+    require("frient-humidity")
   },
   lifecycle_handlers = {
     init = device_init
