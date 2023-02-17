@@ -24,7 +24,7 @@ preferences:
         1: "Red"
         2: "Green"
         3: "Yellow"
-      default: "2"
+      default: 2
   - title: "Button delay (ms)"
     name: buttonDelay
     description: "Delay before button press is registered in milliseconds"
