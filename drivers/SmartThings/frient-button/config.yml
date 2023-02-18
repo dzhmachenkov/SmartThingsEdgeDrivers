@@ -1,0 +1,5 @@
+name: 'frient Button'
+description: 'frient EDGE driver for Panic button and Smart button'
+packageKey: 'frient-button'
+permissions:
+  zigbee: {}
