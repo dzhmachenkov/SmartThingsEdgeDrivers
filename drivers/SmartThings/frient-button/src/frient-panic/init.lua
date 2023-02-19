@@ -15,7 +15,6 @@ end
 local frient_panic_button = {
   NAME = "Frient Panic Button",
   lifecycle_handlers = {
-
   },
   zigbee_handlers = {
     cluster = {

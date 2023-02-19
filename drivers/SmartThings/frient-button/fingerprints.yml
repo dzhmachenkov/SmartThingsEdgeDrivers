@@ -1,5 +1,5 @@
 zigbeeManufacturer:
-  - id: "frient/PBTZB-110"
+  - id: "frient A/S/PBTZB-110"
     deviceLabel: Panic Button
     manufacturer: frient A/S
     model: PBTZB-110

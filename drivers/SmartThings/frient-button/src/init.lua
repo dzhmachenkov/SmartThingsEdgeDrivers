@@ -7,7 +7,6 @@ local device_management = require "st.zigbee.device_management"
 local constants         = require "st.zigbee.constants"
 
 local IASZone           = zcl_clusters.IASZone
-local BasicInput        = zcl_clusters.BasicInput
 
 local battery_table     = {
   [2.90] = 100,
@@ -24,21 +23,6 @@ local battery_table     = {
   [1.90] = 0,
   [0.00] = 0
 }
-
---- @param driver ZigbeeDriver The current driver running containing necessary context for execution
---- @param device st.zigbee.Device The device this message was received from containing identifying information
---- @param value st.zigbee.data_types.Uint16 the value of the event
---- @param zb_rx st.zigbee.ZigbeeMessageRx the full message this report came in
-local function present_value_attr_handler(driver, device, value, zb_rx)
-  local event
-  local additional_fields = {
-    state_change = true
-  }
-  if value.value == true then
-    event = capabilities.button.button.pushed(additional_fields)
-    device:emit_event_for_endpoint(zb_rx.address_header.src_endpoint.value, event)
-  end
-end
 
 --- @param driver ZigbeeDriver The current driver running containing necessary context for execution
 --- @param zone_status st.zigbee.zcl.types.IasZoneStatus 2 byte bitmap zoneStatus attribute value of the IAS Zone cluster
@@ -83,11 +67,6 @@ local function device_init(driver, device)
   battery_defaults.enable_battery_voltage_table(device, battery_table)
 end
 
-local function device_configure(self, device)
-  device:send(device_management.build_bind_request(device, BasicInput.ID, self.environment_info.hub_zigbee_eui))
-  device:send(BasicInput.attributes.PresentValue:configure_reporting(device, 0, 600, 1))
-end
-
 local frient_button_driver = {
   NAME = "frient button driver",
   supported_capabilities = {
@@ -99,8 +78,7 @@ local frient_button_driver = {
   },
   lifecycle_handlers = {
     added = device_added,
-    init = device_init,
-    doConfigure = device_configure
+    init = device_init
   },
   zigbee_handlers = {
     cluster = {
@@ -109,9 +87,6 @@ local frient_button_driver = {
       }
     },
     attr = {
-      [BasicInput.ID] = {
-        [BasicInput.attributes.PresentValue.ID] = present_value_attr_handler
-      },
       [IASZone.ID] = {
         [IASZone.attributes.ZoneStatus.ID] = ias_zone_status_attr_handler
       }

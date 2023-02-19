@@ -18,23 +18,25 @@ local clusters           = require "st.zigbee.zcl.clusters"
 local PowerConfiguration = clusters.PowerConfiguration
 local capabilities       = require "st.capabilities"
 local zigbee_test_utils  = require "integration_test.zigbee_test_utils"
-local BasicInput         = clusters.BasicInput
+local IASZone            = clusters.IASZone
+local IasZoneStatus      = require "st.zigbee.generated.types.IasZoneStatus"
+
 local button_attr        = capabilities.button.button
 local t_utils            = require "integration_test.utils"
 
 local mock_device1       = test.mock_device.build_test_zigbee_device(
     {
-      profile = t_utils.get_profile_definition("button-battery-custom.yml"),
+      profile = t_utils.get_profile_definition("button-battery.yml"),
       zigbee_endpoints = {
         [0x01] = {
           id = 0x01,
           manufacturer = "frient A/S",
-          model = "SBTZB-110",
+          model = "PBTZB-110",
           server_clusters = { 0x0005, 0x0006 }
         },
-        [0x20] = {
-          id = 0x20,
-          server_clusters = { 0x0000, 0x0001, 0x0003, 0x000F, 0x0020 }
+        [0x23] = {
+          id = 0x23,
+          server_clusters = { 0x0000, 0x0001, 0x0003, 0x0020, 0x502 }
         }
       }
     }
@@ -53,7 +55,8 @@ test.register_message_test(
       {
         channel = "zigbee",
         direction = "receive",
-        message = { mock_device1.id, BasicInput.attributes.PresentValue:build_test_attr_report(mock_device1, true) }
+        message = { mock_device1.id, IASZone.attributes.ZoneStatus:build_test_attr_report(mock_device1,
+            IasZoneStatus(0x0002)) }
       },
       {
         channel = "capability",
@@ -95,18 +98,24 @@ test.register_coroutine_test(
       test.socket.zigbee:__expect_send(
           {
             mock_device1.id,
-            zigbee_test_utils .build_bind_request(mock_device1,
+            zigbee_test_utils               .build_bind_request(mock_device1,
                 zigbee_test_utils.mock_hub_eui,
-                BasicInput.ID, 0x20)
+                PowerConfiguration.ID, 0x23):to_endpoint(0x23)
           }
       )
       test.socket.zigbee:__expect_send(
           {
             mock_device1.id,
-            BasicInput.attributes.PresentValue:configure_reporting(mock_device1,
-                0,
-                600,
-                0)
+            PowerConfiguration.attributes.BatteryVoltage:configure_reporting(mock_device1,
+                30,
+                21600,
+                1)
+          }
+      )
+      test.socket.zigbee:__expect_send(
+          {
+            mock_device1.id,
+            PowerConfiguration.attributes.BatteryVoltage:read(mock_device1)
           }
       )
 
