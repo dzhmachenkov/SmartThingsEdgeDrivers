@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "frient/MOSZB-153"
+    deviceLabel: Motion Sensor Pro 2
+    manufacturer: frient A/S
+    model: MOSZB-153
+    deviceProfileName: motion-temp-illuminance-battery
