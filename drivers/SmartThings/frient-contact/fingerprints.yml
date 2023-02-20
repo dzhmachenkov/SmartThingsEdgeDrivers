@@ -1,0 +1,7 @@
+zigbeeManufacturer:
+  - id: "frient/WISZB-131"
+    deviceLabel: Entry Sensor Pro 2
+    manufacturer: frient A/S
+    model: WISZB-131
+    deviceProfileName: contact-temperature-battery
+
