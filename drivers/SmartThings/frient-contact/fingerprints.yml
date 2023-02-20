@@ -4,4 +4,9 @@ zigbeeManufacturer:
     manufacturer: frient A/S
     model: WISZB-120
     deviceProfileName: contact-temperature-battery-tamper
+  - id: "frient/WISZB-121"
+    deviceLabel: Entry Sensor
+    manufacturer: frient A/S
+    model: WISZB-121
+    deviceProfileName: contact-battery
 
