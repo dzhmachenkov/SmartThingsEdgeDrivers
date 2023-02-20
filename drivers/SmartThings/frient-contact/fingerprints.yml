@@ -1,0 +1,7 @@
+zigbeeManufacturer:
+  - id: "frient/WISZB-120"
+    deviceLabel: Entry Sensor Pro
+    manufacturer: frient A/S
+    model: WISZB-120
+    deviceProfileName: contact-temperature-battery-tamper
+
