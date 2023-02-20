@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "frient/MOSZB-140"
+    deviceLabel: Motion Sensor Pro
+    manufacturer: frient A/S
+    model: MOSZB-140
+    deviceProfileName: motion-temp-illuminance-tamper-battery
