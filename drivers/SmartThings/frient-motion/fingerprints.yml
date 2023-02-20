@@ -4,3 +4,8 @@ zigbeeManufacturer:
     manufacturer: frient A/S
     model: MOSZB-140
     deviceProfileName: motion-temp-illuminance-tamper-battery
+  - id: "frient/MOSZB-141"
+    deviceLabel: Motion Sensor
+    manufacturer: frient A/S
+    model: MOSZB-141
+    deviceProfileName: motion-battery
