@@ -1,15 +1,14 @@
-local capabilities     = require "st.capabilities"
-local ZigbeeDriver     = require "st.zigbee"
-local zcl_clusters     = require "st.zigbee.zcl.clusters"
-local defaults         = require "st.zigbee.defaults"
-local battery_defaults = require "st.zigbee.defaults.battery_defaults"
-local constants        = require "st.zigbee.constants"
+local capabilities      = require "st.capabilities"
+local ZigbeeDriver      = require "st.zigbee"
+local zcl_clusters      = require "st.zigbee.zcl.clusters"
+local defaults          = require "st.zigbee.defaults"
+local battery_defaults  = require "st.zigbee.defaults.battery_defaults"
+local device_management = require "st.zigbee.device_management"
+local constants         = require "st.zigbee.constants"
 
-local IASZone          = zcl_clusters.IASZone
+local IASZone           = zcl_clusters.IASZone
 
-local log              = require "log"
-
-local battery_table    = {
+local battery_table     = {
   [2.90] = 100,
   [2.80] = 80,
   [2.75] = 60,
@@ -75,7 +74,8 @@ local frient_button_driver = {
     capabilities.battery
   },
   sub_drivers = {
-    require("frient-smart")
+    require("frient-smart"),
+    require("frient-panic")
   },
   lifecycle_handlers = {
     added = device_added,
@@ -94,6 +94,7 @@ local frient_button_driver = {
     },
   },
   capability_handlers = {
+
   },
   ias_zone_configuration_method = constants.IAS_ZONE_CONFIGURE_TYPE.AUTO_ENROLL_RESPONSE,
 }

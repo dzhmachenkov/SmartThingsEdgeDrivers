@@ -4,3 +4,8 @@ zigbeeManufacturer:
     manufacturer: frient A/S
     model: SBTZB-110
     deviceProfileName: button-battery-custom
+  - id: "frient A/S/PBTZB-110"
+    deviceLabel: Panic Button
+    manufacturer: frient A/S
+    model: PBTZB-110
+    deviceProfileName: button-battery
