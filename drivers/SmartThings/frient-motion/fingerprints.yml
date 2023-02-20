@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "frient/MOSZB-141"
+    deviceLabel: Motion Sensor
+    manufacturer: frient A/S
+    model: MOSZB-141
+    deviceProfileName: motion-battery

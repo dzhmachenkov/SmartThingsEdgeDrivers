@@ -1,0 +1,5 @@
+name: 'frient Motion'
+description: 'frient EDGE driver for Motion sensor and Motion sensor pro'
+packageKey: 'frient-motion-sensor'
+permissions:
+  zigbee: {}
