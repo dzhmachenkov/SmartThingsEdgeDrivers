@@ -1,0 +1,5 @@
+name: 'frient Contact'
+description: 'frient EDGE driver for Entry sensor and Entry sensor pro'
+packageKey: 'frient-contact'
+permissions:
+  zigbee: {}

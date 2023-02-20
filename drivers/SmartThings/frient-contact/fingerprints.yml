@@ -1,0 +1,7 @@
+zigbeeManufacturer:
+  - id: "frient/WISZB-121"
+    deviceLabel: Entry Sensor
+    manufacturer: frient A/S
+    model: WISZB-121
+    deviceProfileName: contact-battery
+
