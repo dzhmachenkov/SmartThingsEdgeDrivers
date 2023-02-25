@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "frient A/S/SMRZB-143"
+    deviceLabel: Smart Cable
+    manufacturer: frient A/S
+    model: SMRZB-143
+    deviceProfileName: switch-power-energy
