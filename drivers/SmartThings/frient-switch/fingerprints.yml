@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "frient A/S/SPLZB-134"
+    deviceLabel: Smart Plug Mini UK
+    manufacturer: frient A/S
+    model: SPLZB-134
+    deviceProfileName: switch-power-energy
