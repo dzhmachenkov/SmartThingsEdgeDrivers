@@ -134,7 +134,7 @@ test.register_coroutine_test(
       test.socket.zigbee:__expect_send(
           {
             mock_device2.id,
-            DeviceTemperatureConfiguration.attributes.CurrentTemperature:configure_reporting(mock_device2, 60, 3600, 16)
+            DeviceTemperatureConfiguration.attributes.CurrentTemperature:configure_reporting(mock_device2, 60, 3600, 100)
           }
       )
 
