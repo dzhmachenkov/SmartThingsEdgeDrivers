@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "frient A/S/SMRZB-332"
+    deviceLabel: Smart DIN Relay
+    manufacturer: frient A/S
+    model: SMRZB-332
+    deviceProfileName: switch-power-energy
