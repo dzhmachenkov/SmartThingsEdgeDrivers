@@ -122,7 +122,7 @@ end
 
 local function device_temperature_configuration_current_temperature_attr_configure(device, reportable_change)
   local attribute = {
-    zcl_clusters.DeviceTemperatureConfiguration.ID,
+    cluster = zcl_clusters.DeviceTemperatureConfiguration.ID,
     attribute = zcl_clusters.DeviceTemperatureConfiguration.attributes.CurrentTemperature.ID,
     minimum_interval = 60,
     maximum_interval = 3600,
