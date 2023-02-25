@@ -1,0 +1,5 @@
+name: 'frient Switch_Outlet_Cable_EMI'
+description: 'frient EDGE driver for Smart plug mini, Smart cable, Electricity meter interface'
+packageKey: 'frient-switch'
+permissions:
+  zigbee: {}
